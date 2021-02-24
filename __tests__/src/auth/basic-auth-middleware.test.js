@@ -23,8 +23,8 @@ describe('Auth Middleware', () => {
   const req = {};
   const res = {
     status: jest.fn(() => res),
-    send: jest.fn(() => res)
-  }
+    send: jest.fn(() => res),
+  };
   const next = jest.fn();
 
   describe('user authentication', () => {
