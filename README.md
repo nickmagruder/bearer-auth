@@ -10,8 +10,8 @@
 
 
 ## User Instructions
-- Deployed to Heroku, accessible at: 
-    - 
+- Deployed to Heroku, accessible at: [https://nmagruder-bearer-auth.herokuapp.com/](https://nmagruder-bearer-auth.herokuapp.com/)
+    
 - To run tests, clone to a directory and run npm test in directory in terminal
 
 ## UML Chart:
