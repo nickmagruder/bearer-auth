@@ -1,3 +1,4 @@
+  
 'use strict';
 
 require('dotenv').config();
@@ -5,7 +6,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const users =  new  mongoose.Schema({
+const users = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
@@ -16,34 +17,33 @@ users.virtual('token').get(function () {
   let tokenObject = {
     username: this.username,
   };
-  return jwt.sign(tokenObject, process.env.SECRET);
+  // const hashed = bcrypt.hash(tokenObject);
+  return jwt.sign(tokenObject, process.env.SECRET, { expiresIn: '1h' });
+  // return jwt.sign(hashed, process.env.SECRET, { expiresIn: '60s' });
 });
 
 users.pre('save', async function () {
   if (this.isModified('password')) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
   }
 });
 
 // BASIC AUTH
 users.statics.authenticateBasic = async function (username, password) {
-  const user = await this.findOne({ username });
+  const user = await this.findOne({ username: username });
   const valid = await bcrypt.compare(password, user.password);
   if (valid) { return user; }
-  throw new Error('Invalid User');
+  else {throw new Error('Invalid User');}
 };
 
 // BEARER AUTH
-users.statics.authenticateWithToken =  async  function (token) {
-  console.log(process.env.SECRET);
+users.statics.authenticateWithToken = async function (token) {
   try {
     const parsedToken = jwt.verify(token, process.env.SECRET);
     const user = await this.findOne({ username: parsedToken.username });
-    console.log(user);
     if (user) { return user; }
     throw new Error('User Not Found');
   } catch (e) {
-    console.log(e.message, 'e.message xxxxxxx')
     throw new Error(e.message);
   }
 };
