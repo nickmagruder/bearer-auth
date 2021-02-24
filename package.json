@@ -7,7 +7,7 @@
     "start": "node index.js",
     "watch": "nodemon index.js",
     "test-watch": "jest --watchAll",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "jest": {
     "testEnvironment": "node"
@@ -26,5 +26,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.15",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0"
   }
 }
